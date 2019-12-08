@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Day1.hpp"
+#include "Day2.hpp"
 
 int main(int argc, char** argv) {
     int day = -1;
@@ -14,11 +15,10 @@ int main(int argc, char** argv) {
 
     switch(day) {
     case 1:
-        {
-            lunarwatcher::Day1 exec;
-            exec.partA();
-            exec.partB();
-        }
+        { lunarwatcher::Day1 exec; }
+        break;
+    case 2:
+        { lunarwatcher::Day2 exec; }
         break;
     default:
         std::cerr << "Day not supported or implemented: " << day << std::endl;

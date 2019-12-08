@@ -10,12 +10,15 @@
 
 namespace lunarwatcher {
 
-class Day1 : public Day<int> {
+class Day1 : public Day {
+private:
+    std::vector<int> rawInput;
 public:
-    Day1() : Day(1, overloads::stoi) {
-        
+    Day1() : Day() {
+        rawInput = grabRawInput<int>(1, overloads::stoi);
+        partA();
+        partB();
     }
-
     int internalPartA() {  
         return std::accumulate(this->rawInput.begin(), this->rawInput.end(), 
                 0, [](int a, int b) { return a + std::floor(b / 3.0) - 2; });

@@ -5,36 +5,49 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
+#include <iostream>
 
 namespace lunarwatcher {
 
-template <typename T>
 class Day {
-protected:
-    int day;
-    std::vector<T> rawInput;
-
 public:
-    Day(int day, std::function<T(const std::string&)> parser = 0) : day(day) {
-        if (!std::is_same<T, std::string>() && !parser)
-            throw "Parser can't be null when T != std::string";
-        grabRawInput(day, parser);
-    }
+    Day() {}
     virtual ~Day() {}
 
-    void grabRawInput(int day, std::function<T(const std::string&)> parser = 0) {
+    template <typename T>
+    std::vector<T> grabRawInput(int day, std::function<T(const std::string&)> parser = 0) {
+        std::vector<T> rawInput;
+        if (!std::is_same<T, std::string>() && !parser)
+            throw "Parser can't be null when T != std::string";
         std::ifstream file("input/day" + std::to_string(day) + ".txt");
         std::string cache;
         while (std::getline(file, cache)) {
             rawInput.push_back(parser(cache));
         }
+        return rawInput;
     }
 
+    std::vector<int> grabCommaSeparatedInts(int day) {
+        std::vector<int> numbers;
+        std::ifstream file("input/day" + std::to_string(day) + ".txt");
+        std::string cache;
+        while (std::getline(file, cache)) {
+            std::stringstream stream(cache);
+            for (int i; stream >> i;) {
+                numbers.push_back(i);
+                if (stream.peek() == ',')
+                    stream.ignore();
+            }
+        }
+        return numbers;
+    }
     virtual void partA() = 0;
     virtual void partB() = 0;
 };
 
-template <> void Day<std::string>::grabRawInput(int day, std::function<std::string(const std::string&)> parser) {
+template <> std::vector<std::string> Day::grabRawInput<std::string>(int day, std::function<std::string(const std::string&)> parser) {
+    std::vector<std::string> rawInput;
     std::ifstream file("input/day" + std::to_string(day) + ".txt");
     std::string cache;
     while (std::getline(file, cache)) {
@@ -43,6 +56,7 @@ template <> void Day<std::string>::grabRawInput(int day, std::function<std::stri
         else
             rawInput.push_back(cache);
     }
+    return rawInput;
 }
 
 }  // namespace lunarwatcher
