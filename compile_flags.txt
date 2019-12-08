@@ -1,0 +1,6 @@
+-std=c++17
+-pedantic
+-Wall
+-Wextra
+-Wno-c++11-narrowing
+-Isrc/

@@ -1,0 +1,3 @@
+[submodule "SConsStandard"]
+	path = SConsStandard
+	url = git@github.com:LunarWatcher/SConsStandard.git

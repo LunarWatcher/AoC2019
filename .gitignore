@@ -1,0 +1,4 @@
+.sconsign.dblite
+build/
+__pycache__
+input/
