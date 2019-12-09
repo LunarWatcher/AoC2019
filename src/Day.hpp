@@ -42,7 +42,10 @@ public:
         }
         return numbers;
     }
-    virtual void partA() = 0;
+    /**
+     * @param partB    Some days build off code from part A. For these, a switch can be used to separate the two where there's a noticeable difference
+     */
+    virtual void partA(bool partB = false) = 0;
     virtual void partB() = 0;
 };
 

@@ -24,7 +24,7 @@ public:
                 0, [](int a, int b) { return a + std::floor(b / 3.0) - 2; });
     }
 
-    void partA() override {
+    void partA(bool = false) override {
         std::cout << "Part A: " 
             << internalPartA() 
             << std::endl;

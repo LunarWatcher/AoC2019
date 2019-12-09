@@ -78,7 +78,7 @@ public:
         return {};
     }
 
-    void partA() override {
+    void partA(bool = false) override {
         int minDist = 9999999;
         int minSteps = 9999999;
         int step1 = 0;

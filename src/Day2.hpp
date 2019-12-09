@@ -40,7 +40,7 @@ public:
         std::cout << "Part B: " << 100 * a + b << std::endl;
     }
 
-    void partA() override {
+    void partA(bool = false) override {
 
         part1 = internalPartA();
         std::cout << "Part A: " << part1 << std::endl;
