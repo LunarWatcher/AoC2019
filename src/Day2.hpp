@@ -58,8 +58,7 @@ public:
                 if (cVal == target) {
                     dump(a, currB);
                     return;
-                } else if(cVal > target)
-                    break;
+                }
                 currB++;
             }
             currB = b;
