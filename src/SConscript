@@ -1,3 +1,2 @@
 Import("env")
-
 env.Program("AdventofCode2019", Glob("*.cpp"))

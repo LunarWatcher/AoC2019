@@ -8,6 +8,21 @@
 
 namespace lunarwatcher {
 
+class MemScope {
+public:
+    std::vector<int> baseCode;
+    long long diagCode = -1;
+    int inputCode;
+    int lastInput = 0;
+    bool givenPhase = false;
+    unsigned long long instructionPointer = 0;
+    bool stopped = false;
+    MemScope(const std::vector<int>& val, int inputCode, int initInp) 
+        : baseCode(val), inputCode(inputCode), lastInput(initInp) {}
+
+
+};
+
 class IntComputer {
 private:
     int get(std::vector<int>& codes, int param, int mode) {
@@ -20,8 +35,47 @@ private:
 public:
     typedef unsigned long long ullong;
 
-    void processVector(std::vector<int> codes, int input) {
-        ullong i = 0;
+    int amplifiers(std::vector<int>& codes, std::vector<int> ampInput, int initialInput) {
+        return amplifiers(codes, ampInput, initialInput, false);
+    }
+
+    
+    int amplifiers(std::vector<int>& codes, std::vector<int> ampInput, int initialInput, bool feedbackLoop = false) {
+        
+        std::vector<MemScope> memory; 
+        for (auto& inp : ampInput) {
+            memory.push_back(MemScope(codes, inp, initialInput));
+        }
+
+        do {
+            
+            for (ullong i = 0; i < memory.size(); i++) {
+                auto& scope = memory[i];
+                processVector(scope, feedbackLoop);
+                if (feedbackLoop && scope.stopped) {
+                    return memory[4].diagCode;
+                }
+                memory[(i + 1) % 5].lastInput = scope.diagCode; 
+            }
+
+        } while(feedbackLoop);
+
+        return memory[4].diagCode;
+    }
+
+    void processVector(const std::vector<int>& codes, int input) {
+        MemScope scope(codes, input, input);
+        processVector(scope);  
+        
+        std::cout << "[IntPuter] Code 4: " << scope.diagCode << std::endl;
+    }
+
+    void processVector(MemScope& scope, bool feedbackLoop = false) {
+        auto& codes = scope.baseCode;
+
+        ullong& i = scope.instructionPointer;
+        bool& givenPhase = scope.givenPhase;
+        int diagCode = -1;
         while (i < codes.size()) {
             int instruction = codes[i];
             int opcode;
@@ -48,12 +102,21 @@ public:
             } else if (opcode == 3) {
                 i++;
                 int dest = codes[i];
-                codes[dest] = input;
-
+                if (!givenPhase) {
+                    givenPhase = true;
+                    codes[dest] = scope.inputCode;
+                } else {
+                    codes[dest] = scope.lastInput;
+                }
             } else if(opcode == 4) {
                 i++;
                 int source = codes[i];
-                std::cout << "[IntPuter] Code 4: " << codes[source] << std::endl;
+                diagCode = codes[source];
+                scope.diagCode = diagCode;
+                if (feedbackLoop) {
+                    i++;
+                    return;
+                }
             } else if (opcode == 5 || opcode == 6) {
                 int num1 = get(codes, ++i, modA);
                 
@@ -75,7 +138,7 @@ public:
                 int num3 = get(codes, ++i, 1);
                 codes[num3] = r;
             } else if (opcode == 99) {
-                std::cout << "[IntPuter] HALT!" << std::endl;
+                scope.stopped = true;
                 return;
             } else {
                 std::cout << "ERROR: at i = " << i << ", opcode " << opcode << ", num" << instruction << std::endl;
@@ -83,6 +146,7 @@ public:
             }
             i++;
         }
+        throw "Reached the end without code 99";
     }
 };
 
