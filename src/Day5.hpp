@@ -10,12 +10,12 @@ namespace lunarwatcher {
 
 class Day5 : Day {
 private:
-    std::vector<int> codes;
+    typedefs::Vector codes;
     IntComputer computer;
 
 public:
     Day5() : Day(), computer() {
-        codes = this->grabCommaSeparatedInts(5);
+        codes = this->grabCommaSeparatedLongLongs(5);
         partA();
         partB();
     }

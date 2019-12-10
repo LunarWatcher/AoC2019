@@ -11,7 +11,7 @@ namespace lunarwatcher {
 class Day7 : Day {
 private:
     IntComputer puter;
-    std::vector<int> codes; 
+    typedefs::Vector codes; 
 public:
     Day7() : Day() {
 
@@ -41,7 +41,7 @@ public:
         std::cout << "Tests done. Running real input" << std::endl;
         
 
-        codes = this->grabCommaSeparatedInts(7);
+        codes = this->grabCommaSeparatedLongLongs(7);
 
         partA();
         partB();

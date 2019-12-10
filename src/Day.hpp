@@ -42,6 +42,23 @@ public:
         }
         return numbers;
     }
+
+
+    std::vector<long long> grabCommaSeparatedLongLongs(int day) {
+        std::vector<long long> numbers;
+        std::ifstream file("input/day" + std::to_string(day) + ".txt");
+        std::string cache;
+        while (std::getline(file, cache)) {
+            std::stringstream stream(cache);
+            for (long long i; stream >> i;) {
+                numbers.push_back(i);
+                if (stream.peek() == ',')
+                    stream.ignore();
+            }
+        }
+        return numbers;
+    }
+
     /**
      * @param partB    Some days build off code from part A. For these, a switch can be used to separate the two where there's a noticeable difference
      */
