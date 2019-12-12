@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
         std::cout << "Enter day: ";
         std::cin >> day;
     }
-
+    
     switch(day) {
     case 1: { lunarwatcher::Day1 exec; } break;
     case 2: { lunarwatcher::Day2 exec; } break;

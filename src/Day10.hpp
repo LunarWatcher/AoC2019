@@ -1,9 +1,10 @@
 #ifndef DAY10_HPP
 #define DAY10_HPP
 #include "Day.hpp"
-#include <map>
+
 #include <cmath>
 #include <limits>
+#include <algorithm>
 
 #define PI 3.1415926535897932385626433832795028841971693993751058209749445923078164062862089986280348253421170679821
 
@@ -24,15 +25,15 @@ public:
                 // 101 // test 2
                 // 102
                 // 103
-                //  104
-                 10 // Real input
+                // 104
+                10 // Real input
                 ); 
         HEIGHT = raw.size();
         WIDTH = raw[0].size();
         map = std::vector<std::vector<bool>>(WIDTH, std::vector<bool>(HEIGHT));
-        for (int y = 0; y < raw.size(); y++) {
+        for (unsigned long long y = 0; y < raw.size(); y++) {
             std::string& row = raw[y];
-            for (int x = 0; x < row.length(); x++) {
+            for (unsigned long long x = 0; x < row.length(); x++) {
                 map.at(x).at(y) = row.at(x) == '#';
                 if (row[x] == '#') {
                     astroTerds.push_back(std::make_pair(x, y));
@@ -120,11 +121,24 @@ public:
         return i < std::numeric_limits<double>::epsilon();
     }
 
+    double getAngle (Vector2& diff) {
+        using std::acos;
+
+        static Vector2 x = {0, 1};
+        static double vLen = len(x);
+        double c = (180.0/PI)*acos(dotProduct(diff, x) / (vLen * len(diff)));
+        if (diff.first > 0) {
+            return 360 - c;
+        }
+        return c;
+    }
+
     bool isSame(const Vector2& a, const Vector2& b) {
+        if(!isParallell(a, b))
+            return false;
 
         static Vector2 x = {1, 0};
         static double vLen = len(x);
-
         using std::acos;
         int alpha1 = std::round((180.0/PI)*acos(dotProduct(a, x) / (vLen * len(a))));
         int alpha2 = std::round((180.0/PI)*acos(dotProduct(b, x) / (vLen * len(b))));
@@ -139,11 +153,11 @@ public:
                     return false;
             }
 
-            return isParallell(a, b);
+            return true;
         }
         return false;
     }
-
+    std::pair<int, int> optimal;
     void partA(bool = false) override {
         std::pair<int, int> optimal;
         int max;
@@ -178,13 +192,67 @@ public:
             }
 
         }
-
+        this->optimal = optimal;
         std::cout << "Part A: " << max << std::endl;
         std::cout << "At: " << optimal.first << ", " << optimal.second << std::endl;
     }
 
     void partB() override {
+        auto source = optimal;
+    
+        // Raw vectors to all teh objects
+        std::vector<Vector2> vecs;
+        std::cout << "Iterating all teh vecs for a time complexity of O(livia)" << std::endl;
+        
+        for (auto& terd : astroTerds) {
+            if (terd == source) continue;
+            vecs.push_back(createVector(terd, source));
+        }
 
+        std::vector<Vector2> refined;
+        std::vector<Vector2> processed;
+        for (Vector2& vec : vecs) {
+            if (vec == source)
+                continue;
+            if (std::find(processed.begin(), processed.end(), vec) != processed.end()) 
+                continue;
+
+            std::vector<Vector2> matches;
+            for (Vector2& otherVec : vecs) {
+                if (otherVec == vec) continue;
+                if (std::find(matches.begin(), matches.end(), otherVec) == matches.end() && isSame(vec, otherVec)) {
+                    matches.push_back(otherVec);
+                }
+            }
+
+            if (matches.size() == 0) {
+                processed.push_back(vec);
+                refined.push_back(vec);
+                continue;
+            }
+
+            std::sort(matches.begin(), matches.end(), [this](const Vector2& a, const Vector2& b) -> bool {
+                return this->len(a) < this->len(b);
+            });
+            refined.push_back(matches[0]);
+            processed.insert(processed.end(), matches.begin(), matches.end());
+
+        }
+
+        std::sort(refined.begin(), refined.end(), [this](auto& a, auto& b) -> bool {
+            return this->getAngle(a) < this->getAngle(b);
+        });
+        
+        for (auto& r : refined) {
+            std::cout << r.first << "," << r.second << ": " << getAngle(r) << std::endl;
+        }
+        std::cout << "Sanity check: Found " << refined.size() << " astroterds" << std::endl;
+
+        std::cout << "Part B: " << std::endl;
+        auto r = addVector({refined[199].first * (refined[199].first < 0 ? 1 : -1), refined[199].second * (refined[199].second > 0 ? -1 : 1)}, source);
+        //auto c = std::make_pair(source.first + c.first, source.second + c.second);
+        std::cout << r.first << "," << r.second << std::endl;
+        std::cout << (r.first * 100 + r.second) << std::endl;
     }
 };
     
