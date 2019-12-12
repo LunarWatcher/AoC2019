@@ -36,7 +36,6 @@ public:
 class IntComputer {
 private:
     long long get(typedefs::Vector& codes, long long param, long long mode, long long node) {
-
         if (mode == 0)
             return codes[codes[param]];
         else if (mode == 1)
