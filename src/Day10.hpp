@@ -243,9 +243,6 @@ public:
             return this->getAngle(a) < this->getAngle(b);
         });
         
-        for (auto& r : refined) {
-            std::cout << r.first << "," << r.second << ": " << getAngle(r) << std::endl;
-        }
         std::cout << "Sanity check: Found " << refined.size() << " astroterds" << std::endl;
 
         std::cout << "Part B: " << std::endl;
