@@ -117,8 +117,6 @@ public:
             
             long long instruction = codes[i];
             int opcode;
-            // mode, param
-            std::vector<std::pair<int, int>> params; 
             
             opcode = instruction % 100;
             int modA = (instruction / 100) % 10;
