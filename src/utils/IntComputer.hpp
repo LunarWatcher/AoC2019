@@ -110,14 +110,13 @@ public:
         auto& codes = scope.baseCode;
 
         ullong& i = scope.instructionPointer;
-        long long relativeBase = scope.relativeBase;
+        long long& relativeBase = scope.relativeBase;
 
         bool& givenPhase = scope.givenPhase;
         while (true) {
             
             long long instruction = codes[i];
             int opcode;
-            
             opcode = instruction % 100;
             int modA = (instruction / 100) % 10;
             int modB = (instruction / 1000) % 10;
@@ -159,6 +158,8 @@ public:
                 }
             } else if (opcode == 5 || opcode == 6) {
                 long long num1 = get(codes, ++i, modA, relativeBase);
+                //std::cout << "Relative mode at i = " << (i - 1) << " with relative base " << relativeBase 
+                    //<< ". modA = " << modA << ", modB = " << modB << ", modC = " << modC << std::endl; 
                 
                 if ((opcode == 5 && num1 != 0) || (opcode == 6 && num1 == 0)) {
                     long long num2 = get(codes, ++i, modB, relativeBase);
@@ -191,6 +192,10 @@ public:
                 throw "ERR";
             }
             i++;
+
+            if (i <= 0) {
+                throw 1ul;
+            }
         }
     }
 };
