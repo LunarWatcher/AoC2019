@@ -24,8 +24,11 @@ public:
     bool stopped = false;
     bool print = false;
 
+    // only used for multiple outputs. Manage the vector yourself. 
+    std::vector<int> mOutputs; 
+
     MemScope(const typedefs::Vector& val, int inputCode, int initInp, bool resize = false) 
-        : baseCode(val), inputCode(inputCode), lastInput(initInp) {
+        : baseCode(val), inputCode(inputCode), lastInput(initInp), mOutputs() {
         if (resize)
             baseCode.resize(10000000);
     }
@@ -105,6 +108,13 @@ public:
         
     }
 
+    void grabNOutput(MemScope& scope, int inputLen) {
+        scope.mOutputs.clear();
+        for (int i = 0; i < inputLen; i++) {
+            processVector(scope, true);
+            scope.mOutputs.push_back(scope.diagCode);
+        }
+    }
 
     void processVector(MemScope& scope, bool feedbackLoop = false) {
         auto& codes = scope.baseCode;
