@@ -111,7 +111,7 @@ public:
         auto& codes = scope.baseCode;
 
         ullong& i = scope.instructionPointer;
-        long long relativeBase = scope.relativeBase;
+        long long& relativeBase = scope.relativeBase;
 
         bool& givenPhase = scope.givenPhase;
         while (true) {
