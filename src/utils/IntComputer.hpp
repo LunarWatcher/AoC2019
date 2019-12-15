@@ -26,7 +26,7 @@ public:
 
     // only used for multiple outputs. Manage the vector yourself. 
     std::vector<int> mOutputs; 
-
+    MemScope() {}
     MemScope(const typedefs::Vector& val, int inputCode, int initInp, bool resize = false) 
         : baseCode(val), inputCode(inputCode), lastInput(initInp), mOutputs() {
         if (resize)
