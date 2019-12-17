@@ -16,6 +16,7 @@
 #include "Day14.hpp"
 #include "Day15.hpp"
 #include "Day16.hpp"
+#include "Day17.hpp"
 
 int main(int argc, char** argv) {
     int day = -1;
@@ -47,6 +48,7 @@ int main(int argc, char** argv) {
     case 14: { lunarwatcher::Day14 exec; } break;
     case 15: { lunarwatcher::Day15 exec; } break;
     case 16: { lunarwatcher::Day16 exec; } break;
+    case 17: { lunarwatcher::Day17 exec; } break;
     default:
         std::cerr << "Day not supported or implemented: " << day << std::endl;
         return -2;
