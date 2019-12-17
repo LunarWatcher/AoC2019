@@ -15,6 +15,7 @@
 #include "Day13.hpp"
 #include "Day14.hpp"
 #include "Day15.hpp"
+#include "Day16.hpp"
 
 int main(int argc, char** argv) {
     int day = -1;
@@ -25,7 +26,10 @@ int main(int argc, char** argv) {
         std::cout << "Enter day: ";
         std::cin >> day;
     }
-    
+    if (day > 25 || day < 0) {
+        std::cout << "You're kidding, right?" << std::endl;
+        return -4;
+    }
     switch(day) {
     case 1: { lunarwatcher::Day1 exec; } break;
     case 2: { lunarwatcher::Day2 exec; } break;
@@ -42,6 +46,7 @@ int main(int argc, char** argv) {
     case 13: { lunarwatcher::Day13 exec; } break;
     case 14: { lunarwatcher::Day14 exec; } break;
     case 15: { lunarwatcher::Day15 exec; } break;
+    case 16: { lunarwatcher::Day16 exec; } break;
     default:
         std::cerr << "Day not supported or implemented: " << day << std::endl;
         return -2;
